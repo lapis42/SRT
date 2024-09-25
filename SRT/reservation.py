@@ -43,11 +43,7 @@ class SRTTicket:
         self.seat_type_code = data["psrmClCd"]
         self.seat_type = self.SEAT_TYPE[self.seat_type_code]
         self.passenger_type_code = data["dcntKndCd"]
-        if self.passenger_type_code in self.DISCOUNT_TYPE:
-            self.passenger_type = self.DISCOUNT_TYPE[self.passenger_type_code]
-        else:
-            self.passenger_type = "기타 할인"
-
+        self.passenger_type = self.DISCOUNT_TYPE.get(self.passenger_type_code, "기타 할인")
         self.price = int(data["rcvdAmt"])
         self.original_price = int(data["stdrPrc"])
         self.discount = int(data["dcntPrc"])
@@ -55,16 +51,13 @@ class SRTTicket:
     def __str__(self):
         return self.dump()
 
-    def __repr__(self):
-        return self.dump()
+    __repr__ = __str__
 
     def dump(self):
-        d = (
+        return (
             f"{self.car}호차 {self.seat} ({self.seat_type}) {self.passenger_type} "
             f"[{self.price}원({self.discount}원 할인)]"
         )
-
-        return d
 
 
 class SRTReservation:
